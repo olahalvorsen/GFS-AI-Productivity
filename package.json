@@ -1,0 +1,35 @@
+{
+  "name": "gfs-ai-productivity",
+  "version": "1.0.0",
+  "description": "GFS AI Productivity Capability Uplift - React + .NET Core Application",
+  "scripts": {
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "start:frontend-only": "cd frontend/gfs-productivity-frontend && npm start",
+    "start:backend": "cd backend/GfsProductivityApi && dotnet run",
+    "start:frontend": "cd frontend/gfs-productivity-frontend && npm start",
+    "dev": "npm run start:frontend-only",
+    "build": "npm run build:frontend",
+    "build:frontend": "cd frontend/gfs-productivity-frontend && npm run build",
+    "build:backend": "cd backend/GfsProductivityApi && dotnet build",
+    "install:frontend": "cd frontend/gfs-productivity-frontend && npm install",
+    "install:all": "npm install && npm run install:frontend",
+    "test:frontend": "cd frontend/gfs-productivity-frontend && npm test",
+    "test:backend": "cd backend/GfsProductivityApi && dotnet test"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": [
+    "react",
+    "dotnet",
+    "gfs",
+    "ai",
+    "productivity"
+  ],
+  "author": "GFS Teams with GitHub Copilot",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/olahalvorsen/GFS-AI-Productivity.git"
+  }
+}
