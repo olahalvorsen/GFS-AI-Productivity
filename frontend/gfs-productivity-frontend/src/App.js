@@ -6,6 +6,7 @@ import Experiment1 from './components/Experiment1';
 import Experiment2 from './components/Experiment2';
 import Experiment3 from './components/Experiment3';
 import AddExperiment from './components/AddExperiment';
+import WeatherExperiment from './components/WeatherExperiment';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/experiment2" element={<Experiment2 />} />
           <Route path="/experiment3" element={<Experiment3 />} />
           <Route path="/add-experiment" element={<AddExperiment />} />
+          <Route path="/weather-experiment" element={<WeatherExperiment />} />
         </Routes>
       </div>
     </Router>

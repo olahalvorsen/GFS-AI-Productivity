@@ -35,6 +35,13 @@ const Home = () => {
               <button className="explore-button">Explore Experiment 3</button>
             </div>
           </Link>
+          <Link to="/weather-experiment" className="feature-card-link">
+            <div className="feature-card">
+              <h3>🌤️ Weather Experiment</h3>
+              <p>API Integration Demo</p>
+              <button className="explore-button">Check Weather</button>
+            </div>
+          </Link>
           <Link to="/add-experiment" className="feature-card-link">
             <div className="feature-card placeholder-card">
               <h3>➕ Add Your Experiment</h3>
