@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import './WeatherExperiment.css';
+import { Container, Row, Col, Card, Button, Alert, Spinner, Badge } from 'react-bootstrap';
+import WindDirection from './WindDirection';
+import WindStrength from './WindStrength';
+import PeopleIcons from './PeopleIcons';
+import WeatherDashboard from './WeatherDashboard';
 
 const WeatherExperiment = () => {
   const [weatherData, setWeatherData] = useState([]);
@@ -58,68 +62,110 @@ const WeatherExperiment = () => {
   };
 
   return (
-    <div className="weather-experiment">
-      <Link to="/" className="back-button">← Back to Home</Link>
-      
-      <h1>Weather Forecast - Norwest, Sydney NSW Australia</h1>
-      <p>Current 5-day weather forecast for your location.</p>
+    <Container fluid className="bg-primary text-white min-vh-100" style={{
+      background: '#007bff'
+    }}>
+      <Container className="py-4">
+        <Row>
+          <Col>
+            <Link to="/" className="btn btn-outline-light mb-4">
+              ← Back to Home
+            </Link>
+          </Col>
+        </Row>
+        
+        <Row className="text-center mb-4">
+          <Col>
+            <h1 className="display-4 mb-3">Weather Forecast</h1>
+            <p className="lead">Norwest, Sydney NSW Australia</p>
+            <p className="mb-4">Current 5-day weather forecast for your location.</p>
+          </Col>
+        </Row>
 
-      <div className="experiment-explainer">
-        <h3>🔗 Backend + Frontend Test</h3>
-        <p>
-          This page shows how the React frontend talks to the .NET backend API. 
-          The backend fetches real weather data and sends it to the frontend to display.
-        </p>
-      </div>
+        <Row className="mb-4">
+          <Col md={8} className="mx-auto">
+            <Card className="bg-transparent border-light">
+              <Card.Body>
+                <h5 className="card-title text-white">
+                  🔗 Backend + Frontend Test
+                </h5>
+                <p className="card-text text-light">
+                  This page shows how the React frontend talks to the .NET backend API. 
+                  The backend fetches real weather data and sends it to the frontend to display.
+                </p>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
 
-      {loading && (
-        <div style={{ textAlign: 'center', padding: '40px' }}>
-          <div style={{ 
-            fontSize: '18px', 
-            color: '#666',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '10px'
-          }}>
-            <div style={{
-              width: '20px',
-              height: '20px',
-              border: '2px solid #007acc',
-              borderTop: '2px solid transparent',
-              borderRadius: '50%',
-              animation: 'spin 1s linear infinite'
-            }}></div>
-            Loading weather forecast...
-          </div>
-        </div>
-      )}
+        {loading && (
+          <Row>
+            <Col className="text-center py-5">
+              <Spinner animation="border" variant="light" className="me-3" />
+              <span className="fs-5">Loading weather forecast...</span>
+            </Col>
+          </Row>
+        )}
 
-      {error && (
-        <div className="error-message">
-          <p>Error: {error}</p>
-        </div>
-      )}
+        {error && (
+          <Row>
+            <Col md={8} className="mx-auto">
+              <Alert variant="danger">
+                <Alert.Heading>Error Loading Weather Data</Alert.Heading>
+                <p className="mb-0">{error}</p>
+              </Alert>
+            </Col>
+          </Row>
+        )}
 
-      {!loading && weatherData.length > 0 && (
-        <div className="weather-results">
-          <h2>5-Day Weather Forecast</h2>
-          <div className="weather-grid">
-            {weatherData.map((forecast, index) => (
-              <div key={index} className="weather-card">
-                <div className="weather-date">
-                  {new Date(forecast.date).toLocaleDateString()}
-                </div>
-                <div className="weather-temp">
-                  {forecast.temperatureC}°C ({forecast.temperatureF}°F)
-                </div>
-                <div className="weather-summary">{forecast.summary}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
+        {!loading && weatherData.length > 0 && (
+          <>
+            {/* Weather Dashboard */}
+            <WeatherDashboard weatherData={weatherData} />
+
+            {/* 5-Day Forecast */}
+            <Row className="mt-5">
+              <Col>
+                <h2 className="text-center mb-4">5-Day Weather Forecast</h2>
+                <Row className="g-4">
+                  {weatherData.map((forecast, index) => (
+                    <Col key={index} sm={6} md={4} lg={3} xl={2}>
+                      <Card className="h-100 bg-transparent border-light text-white">
+                        <Card.Body className="text-center">
+                          <Card.Title className="h6 text-light mb-3">
+                            {new Date(forecast.date).toLocaleDateString('en-US', {
+                              weekday: 'short',
+                              month: 'short',
+                              day: 'numeric'
+                            })}
+                          </Card.Title>
+                          <div className="display-6 fw-bold mb-3">
+                            {forecast.temperatureC}°C
+                          </div>
+                          <div className="text-light mb-2">
+                            {forecast.temperatureF}°F
+                          </div>
+                          <Badge bg="light" text="dark" className="px-3 py-2 mb-3">
+                            {forecast.summary}
+                          </Badge>
+                          {forecast.windSpeed && (
+                            <div className="mt-3">
+                              <div className="text-light mb-1">
+                                <small>💨 {forecast.windSpeed} km/h {forecast.windDirectionCompass}</small>
+                              </div>
+                            </div>
+                          )}
+                        </Card.Body>
+                      </Card>
+                    </Col>
+                  ))}
+                </Row>
+              </Col>
+            </Row>
+          </>
+        )}
+      </Container>
+    </Container>
   );
 };
 

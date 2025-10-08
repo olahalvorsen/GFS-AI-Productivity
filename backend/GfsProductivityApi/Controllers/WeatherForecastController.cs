@@ -61,7 +61,11 @@ public class WeatherForecastController : ControllerBase
                     {
                         Date = DateTime.Parse(weatherApiResponse.Daily.Time[i]),
                         TemperatureC = (int)Math.Round((weatherApiResponse.Daily.Temperature_2m_max[i] + weatherApiResponse.Daily.Temperature_2m_min[i]) / 2),
-                        Summary = GetWeatherDescription(weatherApiResponse.Daily.Weather_code[i])
+                        Summary = GetWeatherDescription(weatherApiResponse.Daily.Weather_code[i]),
+                        WindSpeed = Random.Shared.Next(5, 25), // Mock wind data for now
+                        WindDirection = Random.Shared.Next(0, 360),
+                        WindDirectionCompass = GetCompassDirection(Random.Shared.Next(0, 360)),
+                        BeaufortScale = CalculateBeaufortScale(Random.Shared.Next(5, 25))
                     });
                 }
             }
@@ -78,12 +82,22 @@ public class WeatherForecastController : ControllerBase
     private List<WeatherForecast> GetMockWeatherData()
     {
         var summaries = new[] { "Sunny", "Partly Cloudy", "Cloudy", "Rainy", "Windy" };
+        var windDirections = new[] { "N", "NE", "E", "SE", "S", "SW", "W", "NW" };
         
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        {
-            Date = DateTime.Now.AddDays(index),
-            TemperatureC = Random.Shared.Next(15, 30),
-            Summary = summaries[Random.Shared.Next(summaries.Length)]
+        return Enumerable.Range(1, 5).Select(index => {
+            var windSpeed = Random.Shared.Next(5, 35);
+            var windDegrees = Random.Shared.Next(0, 360);
+            
+            return new WeatherForecast
+            {
+                Date = DateTime.Now.AddDays(index),
+                TemperatureC = Random.Shared.Next(15, 30),
+                Summary = summaries[Random.Shared.Next(summaries.Length)],
+                WindSpeed = windSpeed,
+                WindDirection = windDegrees,
+                WindDirectionCompass = GetCompassDirection(windDegrees),
+                BeaufortScale = CalculateBeaufortScale(windSpeed)
+            };
         }).ToList();
     }
 
@@ -100,6 +114,33 @@ public class WeatherForecastController : ControllerBase
             80 or 81 or 82 => "Rain showers",
             95 or 96 or 99 => "Thunderstorm",
             _ => "Unknown"
+        };
+    }
+
+    private string GetCompassDirection(int degrees)
+    {
+        var directions = new[] { "N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW" };
+        var index = Math.Round(degrees / 22.5) % 16;
+        return directions[(int)index];
+    }
+
+    private int CalculateBeaufortScale(int speedKmh)
+    {
+        return speedKmh switch
+        {
+            < 1 => 0,
+            < 6 => 1,
+            < 12 => 2,
+            < 20 => 3,
+            < 29 => 4,
+            < 39 => 5,
+            < 50 => 6,
+            < 62 => 7,
+            < 75 => 8,
+            < 89 => 9,
+            < 103 => 10,
+            < 118 => 11,
+            _ => 12
         };
     }
 }
