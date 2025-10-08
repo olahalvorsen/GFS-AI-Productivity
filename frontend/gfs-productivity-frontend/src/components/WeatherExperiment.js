@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Row, Col, Card, Button, Alert, Spinner, Badge } from 'react-bootstrap';
-import WindDirection from './WindDirection';
-import WindStrength from './WindStrength';
-import PeopleIcons from './PeopleIcons';
+import { Container, Row, Col, Card, Alert, Spinner, Badge } from 'react-bootstrap';
 import WeatherDashboard from './WeatherDashboard';
 
 const WeatherExperiment = () => {
